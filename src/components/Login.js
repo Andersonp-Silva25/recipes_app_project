@@ -6,8 +6,8 @@ import {
 } from '../services/storage';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [emailValue, setEmailValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
 
   const validateEmail = (emailCorrect) => {
     const emailRegex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
@@ -20,13 +20,13 @@ function Login() {
     return verifyPassword;
   };
 
-  const emailInput = validateEmail(email);
+  const emailInput = validateEmail(emailValue);
 
-  const passwordInput = validatePassword(password);
+  const passwordInput = validatePassword(passwordValue);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addUserLocalStorage({ email: email });
+    addUserLocalStorage({ email: emailValue });
     addMealsLocalStorage('1');
     addDrinksLocalStorage('1');
   };
@@ -45,8 +45,8 @@ function Login() {
         Email
         <input
           type="text"
-          value={ email }
-          onChange={ ({ target }) => setEmail(target.value) }
+          value={ emailValue }
+          onChange={ ({ target }) => setEmailValue(target.value) }
           data-testid="email-input"
           id="email"
         />
@@ -57,8 +57,8 @@ function Login() {
           type="password"
           data-testid="password-input"
           id="password"
-          value={ password }
-          onChange={ ({ target }) => setPassword(target.value) }
+          value={ passwordValue }
+          onChange={ ({ target }) => setPasswordValue(target.value) }
         />
       </label>
       <button

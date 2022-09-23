@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   addUserLocalStorage,
   addMealsLocalStorage,
@@ -8,6 +9,12 @@ import {
 function Login() {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
+
+  const history = useHistory();
+
+  const goToMeals = () => {
+    history.push('/meals');
+  };
 
   const validateEmail = (emailCorrect) => {
     const emailRegex = /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/;
@@ -29,14 +36,8 @@ function Login() {
     addUserLocalStorage({ email: emailValue });
     addMealsLocalStorage('1');
     addDrinksLocalStorage('1');
+    goToMeals();
   };
-
-  //   const button = emailInput && passwordInput;
-  // if (emailInput && passwordInput) {
-  //   setButtonDisabled(false);
-  // } else {
-  //   setButtonDisabled(true);
-  // }
 
   return (
     <form onSubmit={ handleSubmit }>

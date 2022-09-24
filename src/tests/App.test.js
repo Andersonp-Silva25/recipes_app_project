@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 // import App from '../App';
 import Login from '../pages/Login';
-import Profile from '../components/Profile';
+import Profile from '../pages/Profile';
 import renderWithRouter from './renderWithRouter';
 
 describe('Todos os testes', () => {

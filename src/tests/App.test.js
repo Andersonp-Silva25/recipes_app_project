@@ -1,21 +1,14 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from '../App';
-// import Login from '../components/Login';
+// import App from '../App';
+import Login from '../pages/Login';
+import Profile from '../components/Profile';
 import renderWithRouter from './renderWithRouter';
-
-// test('Farewell, front-end', () => {
-//   // Este arquivo pode ser modificado ou deletado sem problemas
-//   render(<App />);
-//   const linkElement = screen.getByText(/TRYBE/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
 
 describe('Todos os testes', () => {
   test('Verifica se a tela Login renderiza corretamente', () => {
-    renderWithRouter(<App />);
-
+    renderWithRouter(<Login />);
     const title = screen.getByRole('heading', { level: 1, name: 'Recipe App' });
     const email = screen.getByTestId('email-input');
     const password = screen.getByTestId('password-input');
@@ -31,7 +24,14 @@ describe('Todos os testes', () => {
     userEvent.type(password, '12345678');
 
     expect(button).not.toBeDisabled();
-
     userEvent.click(button);
+  });
+  // aqui dá problema por conta do filter (tem q saber fazer teste com useContext eu acho...)
+  test('Verifica se a tela Profile renderiza corretamente', () => {
+    renderWithRouter(<Profile />);
+    const title = screen.getByRole('heading', { level: 1, name: 'Profile' });
+    const button = screen.getByTestId('login-submit-btn');
+    expect(title).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
   });
 });

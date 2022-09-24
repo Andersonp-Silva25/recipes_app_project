@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import ProfileIcon from '../images/profileIcon.svg';
 import SearchIcon from '../images/searchIcon.svg';
-import RecipesContext from '../context/RecipesContext';
+// import RecipesContext from '../context/RecipesContext';
+import SearchBar from './SearchBar';
 
 function Header(props) {
-  const { filter, setFilter, isDisplay, setIsDisplay } = useContext(RecipesContext);
+  // const { filter, setFilter } = useContext(RecipesContext);
+  const [isDisplay, setIsDisplay] = useState(false);
   const { title } = props;
 
   const history = useHistory();
@@ -21,17 +23,10 @@ function Header(props) {
     }
   };
 
-  console.log(filter);
-
   return (
     <div>
       {isDisplay && (
-        <input
-          type="text"
-          data-testid="search-input"
-          value={ filter }
-          onChange={ ({ target }) => setFilter(target.value) }
-        />
+        <SearchBar />
       )}
       <h1 data-testid="page-title">{title}</h1>
       <button type="button" onClick={ goToProfile }>

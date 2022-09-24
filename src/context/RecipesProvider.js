@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import RecipesContext from './RecipesContext';
 
 function RecipesProvider({ children }) {
-  const [recipes, setRecipes] = useState([]);
-  const [filter, setFilter] = useState('');
-  const [isDisplay, setIsDisplay] = useState(false);
+  const [recipes, setRecipes] = useState([]); // array de obj da api
+  const [filter, setFilter] = useState(''); // dados do input filter
+  // const [typeFilter, setTypeFilter] = useState(''); // tipo de pesquisa
 
-  const contextValue = {
-    filter,
+  const contextValue = useMemo(() => ({
     recipes,
-    setFilter,
     setRecipes,
-    isDisplay,
-    setIsDisplay,
-  };
+    filter,
+    setFilter,
+  }), [recipes, filter]);
 
   useEffect(() => {
     fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list')

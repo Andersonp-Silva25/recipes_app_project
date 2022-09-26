@@ -25,8 +25,6 @@ function RecipesProvider({ children }) {
       .catch((error) => console.error(`Something is wrong: ${error.message}`));
   }, []);
 
- 
-
   return (
     <RecipesContext.Provider value={ contextValue }>
       {children}

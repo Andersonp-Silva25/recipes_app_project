@@ -15,18 +15,19 @@ function SearchBar() {
       endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`;
     }
     if (searchSelected === 'firstLetter') {
-      name.length > 1 ? alert('Your search must have only 1 (one) character') : 
-      endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?f=${name}`
+      if (name.length > 1) {
+        global.alert('Your search must have only 1 (one) character');
+      } else {
+        endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?f=${name}`;
+      }
     }
     fetch(endpoint)
       .then((response) => response.json())
       .then(({ meals }) => {
-        console.log(meals)
+        console.log(meals);
       })
-      .catch((error) => console.error(`Something is wrong ${error}`))
+      .catch((error) => console.error(`Something is wrong ${error}`));
   };
-
-  
 
   return (
     <div>

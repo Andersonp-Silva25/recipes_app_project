@@ -1,13 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import RecipesContext from '../context/RecipesContext';
 
 function SearchBar() {
-  const { filter, setFilter } = useContext(RecipesContext);
+  const { name, setName } = useContext(RecipesContext);
+  const [searchSelected, setSearchSelected] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`Pesquisou ${filter} :D`);
+    let endpoint = '';
+    if (searchSelected === 'ingredient') {
+      endpoint = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${name}`;
+    }
+    if (searchSelected === 'name') {
+      endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`;
+    }
+    if (searchSelected === 'firstLetter') {
+      name.length > 1 ? alert('Your search must have only 1 (one) character') : 
+      endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?f=${name}`
+    }
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then(({ meals }) => {
+        console.log(meals)
+      })
+      .catch((error) => console.error(`Something is wrong ${error}`))
   };
+
+  
 
   return (
     <div>
@@ -15,28 +34,29 @@ function SearchBar() {
         <input
           type="text"
           data-testid="search-input"
-          value={ filter }
-          onChange={ ({ target }) => setFilter(target.value) }
+          value={ name }
+          onChange={ ({ target }) => setName(target.value) }
         />
         <label htmlFor="ing">
           Ingredient
           <input
             type="radio"
             id="ing"
-            name="ingredient"
+            name="search"
             data-testid="ingredient-search-radio"
-          // value={ typeFilter }
-          // onChange={ ({ target }) => setTypeFilter(target.value) }
+            value="ingredient"
+            onClick={ ({ target }) => setSearchSelected(target.value) }
           />
         </label>
         <label htmlFor="name">
           Name
           <input
             type="radio"
-            name="name"
-            value="name"
+            name="search"
             id="name"
             data-testid="name-search-radio"
+            value="name"
+            onClick={ ({ target }) => setSearchSelected(target.value) }
           />
         </label>
         <label htmlFor="search">
@@ -44,15 +64,15 @@ function SearchBar() {
           <input
             type="radio"
             name="search"
-            value="search"
             id="search"
             data-testid="first-letter-search-radio"
+            value="firstLetter"
+            onClick={ ({ target }) => setSearchSelected(target.value) }
           />
         </label>
         <button
           type="submit"
           data-testid="exec-search-btn"
-
         >
           Search
         </button>

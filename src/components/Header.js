@@ -26,7 +26,7 @@ function Header(props) {
   return (
     <div>
       {isDisplay && (
-        <SearchBar />
+        <SearchBar title={ title } />
       )}
       <h1 data-testid="page-title">{title}</h1>
       <button type="button" onClick={ goToProfile }>

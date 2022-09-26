@@ -1,6 +1,6 @@
 // https://www.themealdb.com/api/json/v1/1/
 
-async function fetchMeels(searchSelected, name) {
+async function fetchMeels(searchSelected, name, setMealsArrays, history) {
   let api = '';
 
   if (searchSelected === 'ingredient') {
@@ -20,7 +20,10 @@ async function fetchMeels(searchSelected, name) {
     .then((response) => response.json())
     .then(({ meals }) => {
       console.log(meals);
-      return meals;
+      setMealsArrays(meals);
+      if (meals.length === 1) {
+        history.push(`/meals/${meals[0].idMeal}`);
+      }
     })
     .catch((error) => console.error(`Something is wrong ${error}`));
 }

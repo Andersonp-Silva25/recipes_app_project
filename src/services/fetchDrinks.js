@@ -1,6 +1,6 @@
 // https://www.thecocktaildb.com/api/json/v1/1/
 
-async function fetchDrinks(searchSelected, name) {
+async function fetchDrinks(searchSelected, name, setMealsArrays, history) {
   let api = '';
 
   if (searchSelected === 'ingredient') {
@@ -20,7 +20,10 @@ async function fetchDrinks(searchSelected, name) {
     .then((response) => response.json())
     .then(({ drinks }) => {
       console.log(drinks);
-      return drinks;
+      setMealsArrays(drinks);
+      if (drinks.length === 1) {
+        history.push(`/drinks/${drinks[0].idDrink}`);
+      }
     })
     .catch((error) => console.error(`Something is wrong ${error}`));
 }

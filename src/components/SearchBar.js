@@ -5,19 +5,20 @@ import fetchMeels from '../services/fetchMeals';
 import fetchDrinks from '../services/fetchDrinks';
 
 function SearchBar() {
-  const { name, setName } = useContext(RecipesContext);
+  const { name, setName, setMealsArrays } = useContext(RecipesContext);
   const [searchSelected, setSearchSelected] = useState('');
+  const history = useHistory();
   const { location: { pathname } } = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (pathname === '/meals') {
-      fetchMeels(searchSelected, name);
+      await fetchMeels(searchSelected, name, setMealsArrays, history);
+      // history.push(`/meals/${mealsArray[0].idMeal}`);
     }
-
     if (pathname === '/drinks') {
-      fetchDrinks(searchSelected, name);
+      await fetchDrinks(searchSelected, name, setMealsArrays, history);
     }
   };
 

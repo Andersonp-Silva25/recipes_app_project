@@ -4,15 +4,15 @@ import RecipesContext from './RecipesContext';
 
 function RecipesProvider({ children }) {
   const [name, setName] = useState(''); // dados do input filter
-  const [mealsArray, setMealsArrays] = useState([]);
+  const [mealsAndDrinksArrays, setMealsAndDrinksArrays] = useState([]);
   // const [typeFilter, setTypeFilter] = useState(''); // tipo de pesquisa
 
   const contextValue = useMemo(() => ({
     name,
     setName,
-    mealsArray,
-    setMealsArrays,
-  }), [name, mealsArray]);
+    mealsAndDrinksArrays,
+    setMealsAndDrinksArrays,
+  }), [name, mealsAndDrinksArrays]);
 
   return (
     <RecipesContext.Provider value={ contextValue }>

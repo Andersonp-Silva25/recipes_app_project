@@ -1,31 +1,28 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import RecipesContext from '../context/RecipesContext';
 import fetchMeels from '../services/fetchMeals';
 import fetchDrinks from '../services/fetchDrinks';
 
-function SearchBar(props) {
-  const { name, setName, mealsArray, setMealsArrays } = useContext(RecipesContext);
+function SearchBar() {
+  const {
+    name,
+    setName,
+    setMealsAndDrinksArrays } = useContext(RecipesContext);
   const [searchSelected, setSearchSelected] = useState('');
   const history = useHistory();
   const { location: { pathname } } = useHistory();
-  const cardLimit = 12;
-  let { title } = props;
-
-  if (title === 'Meals') title = 'Meal';
-  if (title === 'Drinks') title = 'Drink';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (pathname === '/meals') {
       const mealsReq = await fetchMeels(searchSelected, name, history);
-      setMealsArrays(mealsReq);
+      setMealsAndDrinksArrays(mealsReq);
     }
     if (pathname === '/drinks') {
       const drinksReq = await fetchDrinks(searchSelected, name, history);
-      setMealsArrays(drinksReq);
+      setMealsAndDrinksArrays(drinksReq);
     }
   };
 
@@ -82,27 +79,8 @@ function SearchBar(props) {
           Search
         </button>
       </form>
-      {mealsArray
-        && mealsArray.slice(0, cardLimit)
-          .map((item, index) => (
-            <div key={ item[`id${title}`] } data-testid={ `${index}-recipe-card` }>
-              <p data-testid={ `${index}-card-name` }>
-                {item[`str${title}`]}
-              </p>
-              <img
-                src={ item[`str${title}Thumb`] }
-                data-testid={ `${index}-card-img` }
-                alt={ `Imagem do ${item.strMeal}` }
-                width="50px"
-              />
-            </div>
-          ))}
     </div>
   );
 }
-
-SearchBar.propTypes = {
-  title: PropTypes.string.isRequired,
-};
 
 export default SearchBar;

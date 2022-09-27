@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
@@ -31,7 +31,7 @@ describe('Testa o componente SearchBar', () => {
     expect(nameRadio).toBeInTheDocument();
   });
 
-  it('Testa se é feito a requisição na pagina drinks', () => {
+  it('Testa se é feito a requisição na pagina drinks', async () => {
     renderWithRouter(<App />, ['/drinks']);
     const showSearchBar = screen.getAllByRole('button')[1];
     userEvent.click(showSearchBar);
@@ -41,6 +41,9 @@ describe('Testa o componente SearchBar', () => {
     userEvent.type(searchInput, 'a');
     userEvent.click(firstLetterRadio);
     userEvent.click(searchButton);
-    expect(firstLetterRadio).toBeInTheDocument();
+    await waitFor(() => {
+      const firstRecipeCard = screen.getByTestId('0-recipe-card');
+      expect(firstRecipeCard).toBeInTheDocument();
+    });
   });
 });

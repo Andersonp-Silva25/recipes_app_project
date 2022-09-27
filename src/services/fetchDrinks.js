@@ -1,6 +1,6 @@
 // https://www.thecocktaildb.com/api/json/v1/1/
 
-async function fetchDrinks(searchSelected, name, setMealsArrays, history) {
+async function fetchDrinks(searchSelected, name, history) {
   let api = '';
 
   if (searchSelected === 'ingredient') {
@@ -16,18 +16,19 @@ async function fetchDrinks(searchSelected, name, setMealsArrays, history) {
       api = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${name}`;
     }
   }
-  await fetch(api)
+  const drinksReq = await fetch(api)
     .then((response) => response.json())
     .then(({ drinks }) => {
-      setMealsArrays(drinks);
       if (drinks.length === 1) {
         history.push(`/drinks/${drinks[0].idDrink}`);
       }
+      return drinks;
     })
     .catch((error) => {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
       console.error(`Something is wrong ${error}`);
     });
+  return drinksReq;
 }
 
 export default fetchDrinks;

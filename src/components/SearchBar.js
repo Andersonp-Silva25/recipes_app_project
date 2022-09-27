@@ -20,10 +20,12 @@ function SearchBar(props) {
     e.preventDefault();
 
     if (pathname === '/meals') {
-      await fetchMeels(searchSelected, name, setMealsArrays, history);
+      const mealsReq = await fetchMeels(searchSelected, name, history);
+      setMealsArrays(mealsReq);
     }
     if (pathname === '/drinks') {
-      await fetchDrinks(searchSelected, name, setMealsArrays, history);
+      const drinksReq = await fetchDrinks(searchSelected, name, history);
+      setMealsArrays(drinksReq);
     }
   };
 

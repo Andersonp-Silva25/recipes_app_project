@@ -1,6 +1,6 @@
 // https://www.themealdb.com/api/json/v1/1/
 
-async function fetchMeels(searchSelected, name, setMealsArrays, history) {
+async function fetchMeels(searchSelected, name, history) {
   let api = '';
 
   if (searchSelected === 'ingredient') {
@@ -16,19 +16,19 @@ async function fetchMeels(searchSelected, name, setMealsArrays, history) {
       api = `https://www.themealdb.com/api/json/v1/1/search.php?f=${name}`;
     }
   }
-  fetch(api)
+  const mealReq = await fetch(api)
     .then((response) => response.json())
     .then(({ meals }) => {
-      console.log(meals);
-      setMealsArrays(meals);
       if (meals.length === 1) {
         history.push(`/meals/${meals[0].idMeal}`);
       }
+      return meals;
     })
     .catch((error) => {
       global.alert('Sorry, we haven\'t found any recipes for these filters.');
       console.error(`Something is wrong ${error}`);
     });
+  return mealReq;
 }
 
 export default fetchMeels;

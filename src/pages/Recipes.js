@@ -3,16 +3,31 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import RecipesContext from '../context/RecipesContext';
 import useRecipes from '../services/useRecipes';
+import useCategories from '../services/useCategories';
 
 function Recipes({ title }) {
-  const { mealsAndDrinksArrays, setMealsAndDrinksArrays } = useContext(RecipesContext);
+  const { mealsAndDrinksArrays, setMealsAndDrinksArrays,
+    categories } = useContext(RecipesContext);
   const { location: { pathname } } = useHistory();
+  const categoryLimit = 5;
   const cardLimit = 12;
 
   useRecipes(pathname, setMealsAndDrinksArrays);
+  useCategories(pathname);
 
   return (
     <div>
+      {categories
+      && categories.slice(0, categoryLimit)
+        .map(({ strCategory }, index) => (
+          <button
+            key={ index }
+            type="button"
+            data-testid={ `${strCategory}-category-filter` }
+          >
+            {strCategory}
+          </button>
+        ))}
       {mealsAndDrinksArrays
       && mealsAndDrinksArrays.slice(0, cardLimit)
         .map((item, index) => (

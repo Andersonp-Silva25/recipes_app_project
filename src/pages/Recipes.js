@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import RecipesContext from '../context/RecipesContext';
 import useRecipes from '../services/useRecipes';
 import useCategories from '../services/useCategories';
+import filterCategories from '../services/useFilterCategories';
 
 function Recipes({ title }) {
   const { mealsAndDrinksArrays, setMealsAndDrinksArrays,
@@ -15,6 +16,20 @@ function Recipes({ title }) {
   useRecipes(pathname, setMealsAndDrinksArrays);
   useCategories(pathname);
 
+  const clearFilter = () => {
+    let endpoint = '';
+    if (pathname === '/meals') endpoint = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+    if (pathname === '/drinks') endpoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then(({ meals, drinks }) => {
+        if (meals) setMealsAndDrinksArrays(meals);
+        if (drinks) setMealsAndDrinksArrays(drinks);
+      })
+      .catch((error) => console.error(`Something is wrong ${error}`));
+  };
+
   return (
     <div>
       {categories
@@ -24,10 +39,20 @@ function Recipes({ title }) {
             key={ index }
             type="button"
             data-testid={ `${strCategory}-category-filter` }
+            onClick={ () => (
+              filterCategories(pathname, strCategory, setMealsAndDrinksArrays)) }
           >
             {strCategory}
           </button>
         ))}
+      <button
+        type="button"
+        data-testid="All-category-filter"
+        onClick={ clearFilter }
+      >
+        All
+
+      </button>
       {mealsAndDrinksArrays
       && mealsAndDrinksArrays.slice(0, cardLimit)
         .map((item, index) => (

@@ -16,16 +16,18 @@ async function fetchDrinks(searchSelected, name, setMealsArrays, history) {
       api = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${name}`;
     }
   }
-  fetch(api)
+  await fetch(api)
     .then((response) => response.json())
     .then(({ drinks }) => {
-      console.log(drinks);
       setMealsArrays(drinks);
       if (drinks.length === 1) {
         history.push(`/drinks/${drinks[0].idDrink}`);
       }
     })
-    .catch((error) => console.error(`Something is wrong ${error}`));
+    .catch((error) => {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      console.error(`Something is wrong ${error}`);
+    });
 }
 
 export default fetchDrinks;

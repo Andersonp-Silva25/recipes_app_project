@@ -30,7 +30,7 @@ describe('Todos os testes', () => {
   test('Verifica se a tela Profile renderiza corretamente', () => {
     renderWithRouter(<Profile />);
     const title = screen.getByRole('heading', { level: 1, name: 'Profile' });
-    const button = screen.getByTestId('login-submit-btn');
+    const button = screen.getByRole('button');
     expect(title).toBeInTheDocument();
     expect(button).toBeInTheDocument();
   });

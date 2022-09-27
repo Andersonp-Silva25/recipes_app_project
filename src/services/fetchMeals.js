@@ -25,7 +25,10 @@ async function fetchMeels(searchSelected, name, setMealsArrays, history) {
         history.push(`/meals/${meals[0].idMeal}`);
       }
     })
-    .catch((error) => console.error(`Something is wrong ${error}`));
+    .catch((error) => {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+      console.error(`Something is wrong ${error}`);
+    });
 }
 
 export default fetchMeels;

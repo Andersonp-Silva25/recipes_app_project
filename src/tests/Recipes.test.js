@@ -1,6 +1,5 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
@@ -11,7 +10,7 @@ describe('Testa o componente Recipes', () => {
     expect(pathname).toBe('/meals');
   });
 
-  test('Testa se é renderizado as receitas', async () => {
+  test('Testa se as receitas são renderizadas', async () => {
     renderWithRouter(<App />, ['/meals']);
     await waitFor(() => {
       const firstRecipeCard = screen.getByTestId('0-recipe-card');
@@ -35,12 +34,29 @@ describe('Testa o componente Recipes', () => {
     userEvent.click(button);
   });
 
-  // test('Testa o botão de limpar filtros', async () => {
-  //   renderWithRouter(<App />, ['/meals']);
-  //   await waitFor(() => {
-  //     const beefCategoryFilter = screen.getByTestId('beef-category-filter');
-  //     expect(beefCategoryFilter).toBeInTheDocument();
-  //   });
-  //   userEvent.click(beefCategoryFilter);
-  // });
+  test('Testa se as categorias são renderizadas', async () => {
+    renderWithRouter(<App />, ['/meals']);
+    await waitFor(() => {
+      const firstCategoryFilter = screen.getByTestId('Goat-category-filter');
+      expect(firstCategoryFilter).toBeInTheDocument();
+    });
+  });
+
+  test('Testa se o filtro Beef', async () => {
+    renderWithRouter(<App />, ['/meals']);
+    await waitFor(() => {
+      const firstCategoryFilter = screen.getByTestId('Beef-category-filter');
+      userEvent.click(firstCategoryFilter);
+    });
+    await waitFor(() => {
+      const firstBeefCard = screen.getByTestId('0-card-name');
+      expect(firstBeefCard.innerHTML).toBe('Beef and Mustard Pie');
+    });
+    const firstCategoryFilter = screen.getByTestId('Beef-category-filter');
+    userEvent.click(firstCategoryFilter);
+    await waitFor(() => {
+      const firstCard = screen.getByTestId('0-card-name');
+      expect(firstCard.innerHTML).toBe('Corba');
+    });
+  });
 });

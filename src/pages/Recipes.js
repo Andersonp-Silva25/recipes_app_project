@@ -27,8 +27,7 @@ function Recipes({ title }) {
       .then(({ meals, drinks }) => {
         if (meals) setMealsAndDrinksArrays(meals);
         if (drinks) setMealsAndDrinksArrays(drinks);
-      })
-      .catch((error) => console.error(`Something is wrong ${error}`));
+      });
   };
 
   return (

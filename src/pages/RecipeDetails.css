@@ -3,3 +3,8 @@
   width: 180px;
   overflow-x: scroll;
 }
+
+.start-recipe {
+  position: fixed;
+  bottom: 0;
+}

@@ -88,6 +88,13 @@ function RecipeDetails({ match: { params: { id }, path } }) {
             </div>
           </div>
         )}
+      <button
+        type="button"
+        className="start-recipe"
+        data-testid="start-recipe-btn"
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }

@@ -41,6 +41,21 @@ function RecipeDetails({ match: { params: { id }, path } }) {
     setDidCopy(true);
   };
 
+  const favoriteRecipe = () => {
+    const alcoholicOrNot = recipe[0].strAlcoholic ? recipe[0].strAlcoholic : '';
+    const nationality = recipe[0].strArea ? recipe[0].strArea : '';
+    const obj = [{
+      id: recipe[0][`id${title}`],
+      type: title.toLowerCase(),
+      nationality,
+      category: recipe[0].strCategory,
+      alcoholicOrNot,
+      name: recipe[0][`str${title}`],
+      image: recipe[0][`str${title}Thumb`],
+    }];
+    localStorage.setItem('favoriteRecipes', JSON.stringify(obj));
+  };
+
   return (
     <div>
       {(recipe.length > 0)
@@ -65,6 +80,7 @@ function RecipeDetails({ match: { params: { id }, path } }) {
               type="button"
               className="favorite-recipe"
               data-testid="favorite-btn"
+              onClick={ favoriteRecipe }
             >
               Favorite
             </button>

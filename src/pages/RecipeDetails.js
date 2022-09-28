@@ -1,23 +1,30 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import Carousel from 'react-bootstrap/Carousel';
 import useRecipe from '../services/useRecipe';
 import useRecipes from '../services/useRecipes';
 import useIngredients from '../services/useIngredients';
 import RecipesContext from '../context/RecipesContext';
+import './RecipeDetails.css';
 
 function RecipeDetails({ match: { params: { id }, path } }) {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-  const { setMealsAndDrinksArrays } = useContext(RecipesContext);
+  const { mealsAndDrinksArrays, setMealsAndDrinksArrays } = useContext(RecipesContext);
   let title = '';
   let recommendationTitle = '';
+  let invertedTitle = '';
+  const cardLimit = 6;
+
   if (path.includes('/meals')) {
     title = 'Meal';
     recommendationTitle = '/drinks';
+    invertedTitle = 'Drink';
   }
   if (path.includes('/drinks')) {
     title = 'Drink';
     recommendationTitle = '/meals';
+    invertedTitle = 'Meal';
   }
 
   useRecipe(id, title, setRecipe);
@@ -26,7 +33,7 @@ function RecipeDetails({ match: { params: { id }, path } }) {
 
   return (
     <div>
-      {recipe.length > 0
+      {(recipe.length > 0)
         && (
           <div>
             <h1 data-testid="recipe-title">{recipe[0][`str${title}`]}</h1>
@@ -61,6 +68,25 @@ function RecipeDetails({ match: { params: { id }, path } }) {
                 src={ recipe[0].strYoutube }
               />
             )}
+            <div className="recomedation-container">
+              {mealsAndDrinksArrays
+              && mealsAndDrinksArrays.slice(0, cardLimit)
+                .map((item, index) => (
+                  <div
+                    key={ item[`id${invertedTitle}`] }
+                    data-testid={ `${index}-recommendation-card` }
+                  >
+                    <p data-testid={ `${index}-recommendation-title` }>
+                      {item[`str${invertedTitle}`]}
+                    </p>
+                    <img
+                      src={ item[`str${invertedTitle}Thumb`] }
+                      alt={ `Imagem do ${item.strMeal}` }
+                      width="100px"
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         )}
     </div>

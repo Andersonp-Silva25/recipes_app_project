@@ -1,0 +1,5 @@
+.recomedation-container {
+  display: flex;
+  width: 180px;
+  overflow-x: scroll;
+}

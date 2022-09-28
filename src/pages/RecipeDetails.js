@@ -1,16 +1,21 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import useRecipe from '../services/useRecipe';
 import useRecipes from '../services/useRecipes';
 import useIngredients from '../services/useIngredients';
 import RecipesContext from '../context/RecipesContext';
 import './RecipeDetails.css';
+import ShareIcon from '../images/shareIcon.svg';
+
+const copy = require('clipboard-copy');
 
 function RecipeDetails({ match: { params: { id }, path } }) {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+  const [didCopy, setDidCopy] = useState(false);
   const { mealsAndDrinksArrays, setMealsAndDrinksArrays } = useContext(RecipesContext);
+  const history = useHistory();
   let title = '';
   let recommendationTitle = '';
   let invertedTitle = '';
@@ -31,6 +36,11 @@ function RecipeDetails({ match: { params: { id }, path } }) {
   useRecipes(recommendationTitle, setMealsAndDrinksArrays);
   useIngredients(recipe, setIngredients, title);
 
+  const shareRecipe = () => {
+    copy(window.location.href);
+    setDidCopy(true);
+  };
+
   return (
     <div>
       {(recipe.length > 0)
@@ -50,6 +60,25 @@ function RecipeDetails({ match: { params: { id }, path } }) {
               alt={ `Imagem do ${recipe[0][`str${title}`]}` }
               width="200px"
             />
+
+            <button
+              type="button"
+              className="favorite-recipe"
+              data-testid="favorite-btn"
+            >
+              Favorite
+            </button>
+
+            <button
+              type="button"
+              data-testid="share-btn"
+              onClick={ shareRecipe }
+            >
+              <img src={ ShareIcon } alt="share-icon" />
+            </button>
+
+            {didCopy && <p>Link copied!</p>}
+
             {ingredients.map(({ Ingredient, Measure }, index) => (
               <div
                 key={ index }

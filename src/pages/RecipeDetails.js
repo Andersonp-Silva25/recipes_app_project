@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import Carousel from 'react-bootstrap/Carousel';
 import useRecipe from '../services/useRecipe';
 import useRecipes from '../services/useRecipes';
 import useIngredients from '../services/useIngredients';

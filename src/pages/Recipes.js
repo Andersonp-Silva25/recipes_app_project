@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import RecipesContext from '../context/RecipesContext';
 import useRecipes from '../services/useRecipes';
@@ -10,6 +10,7 @@ function Recipes({ title }) {
   const { mealsAndDrinksArrays, setMealsAndDrinksArrays,
     categories } = useContext(RecipesContext);
   const { location: { pathname } } = useHistory();
+  const [currentFilter, setCurrentFilter] = useState('');
   const categoryLimit = 5;
   const cardLimit = 12;
 
@@ -39,8 +40,15 @@ function Recipes({ title }) {
             key={ index }
             type="button"
             data-testid={ `${strCategory}-category-filter` }
-            onClick={ () => (
-              filterCategories(pathname, strCategory, setMealsAndDrinksArrays)) }
+            onClick={ () => {
+              if (strCategory !== currentFilter) {
+                filterCategories(pathname, strCategory, setMealsAndDrinksArrays);
+                setCurrentFilter(strCategory);
+              } else {
+                clearFilter();
+                setCurrentFilter('');
+              }
+            } }
           >
             {strCategory}
           </button>
@@ -56,17 +64,21 @@ function Recipes({ title }) {
       {mealsAndDrinksArrays
       && mealsAndDrinksArrays.slice(0, cardLimit)
         .map((item, index) => (
-          <div key={ item[`id${title}`] } data-testid={ `${index}-recipe-card` }>
-            <p data-testid={ `${index}-card-name` }>
-              {item[`str${title}`]}
-            </p>
-            <img
-              src={ item[`str${title}Thumb`] }
-              data-testid={ `${index}-card-img` }
-              alt={ `Imagem do ${item.strMeal}` }
-              width="50px"
-            />
-          </div>
+          <Link key={ item[`id${title}`] } to={ `${pathname}/${item[`id${title}`]}` }>
+            <div
+              data-testid={ `${index}-recipe-card` }
+            >
+              <p data-testid={ `${index}-card-name` }>
+                {item[`str${title}`]}
+              </p>
+              <img
+                src={ item[`str${title}Thumb`] }
+                data-testid={ `${index}-card-img` }
+                alt={ `Imagem do ${item.strMeal}` }
+                width="50px"
+              />
+            </div>
+          </Link>
         ))}
     </div>
   );

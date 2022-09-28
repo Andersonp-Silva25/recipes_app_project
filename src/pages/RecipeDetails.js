@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import useRecipe from '../services/useRecipe';
 import useRecipes from '../services/useRecipes';
 import useIngredients from '../services/useIngredients';
@@ -88,13 +89,15 @@ function RecipeDetails({ match: { params: { id }, path } }) {
             </div>
           </div>
         )}
-      <button
-        type="button"
-        className="start-recipe"
-        data-testid="start-recipe-btn"
-      >
-        Start Recipe
-      </button>
+      <Link to={ `${path.split(':')[0]}${id}/in-progress` }>
+        <button
+          type="button"
+          className="start-recipe"
+          data-testid="start-recipe-btn"
+        >
+          Start Recipe
+        </button>
+      </Link>
     </div>
   );
 }

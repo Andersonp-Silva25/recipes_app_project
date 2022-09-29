@@ -23,15 +23,18 @@ describe('Testa o componente RecipeDetails', () => {
     });
   });
 
-  // it('Testa o botão share', async () => {
-  //   document.execComm = jest.fn();
-  //   renderWithRouter(<App />, ['/meals/52977']);
-  //   await waitFor(() => {
-  //     const shareBtn = screen.getByTestId('share-btn');
-  //     expect(shareBtn).toBeInTheDocument();
-  //     userEvent.click(shareBtn);
-  //   });
-  // });
+  it('Testa o botão share', async () => {
+    const mockClipboard = {
+      writeText: jest.fn(),
+    };
+    navigator.clipboard = mockClipboard;
+    renderWithRouter(<App />, ['/meals/52977']);
+    await waitFor(() => {
+      const shareBtn = screen.getByTestId('share-btn');
+      expect(shareBtn).toBeInTheDocument();
+      userEvent.click(shareBtn);
+    });
+  });
 
   it('Testa o botão favoritar', async () => {
     renderWithRouter(<App />, ['/drinks/17222']);

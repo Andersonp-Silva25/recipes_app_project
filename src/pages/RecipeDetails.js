@@ -1,15 +1,16 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import useRecipe from '../services/useRecipe';
 import useRecipes from '../services/useRecipes';
 import useIngredients from '../services/useIngredients';
+import useFav from '../services/useFav';
 import RecipesContext from '../context/RecipesContext';
 import './RecipeDetails.css';
 import ShareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
-
-const copy = require('clipboard-copy');
+import shareRecipe from '../services/shareRecipe';
 
 function RecipeDetails({ match: { params: { id }, path } }) {
   const [recipe, setRecipe] = useState([]);
@@ -38,51 +39,10 @@ function RecipeDetails({ match: { params: { id }, path } }) {
     invertedTitle = 'Meal';
   }
 
-  useEffect(() => {
-    async function getRecipe() {
-      let endpoint = '';
-      if (title === 'Meal') endpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-      if (title === 'Drink') endpoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-      fetch(endpoint)
-        .then((response) => response.json())
-        .then(({ meals, drinks }) => {
-          if (meals) {
-            setRecipe(meals);
-            localStorage.setItem('MealsAndDrinks', JSON.stringify(meals));
-          }
-          if (drinks) {
-            setRecipe(drinks);
-            localStorage.setItem('MealsAndDrinks', JSON.stringify(drinks));
-          }
-        });
-    }
-    getRecipe();
-  }, [id, title]);
-
-  // useRecipe(id, title, setRecipe);
+  useRecipe(id, title, setRecipe);
   useRecipes(recommendationTitle, setMealsAndDrinksArrays);
   useIngredients(recipe, setIngredients, title);
-  // useFav(title, setIsFavorite, recipe);
-
-  useEffect(() => {
-    function getFav() {
-      const favList = JSON.parse(localStorage.getItem('favoriteRecipes'))
-        ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
-
-      if (recipe.length > 0) {
-        const verifyFavorite = favList
-          .some((fav) => fav.id === recipe[0][`id${title}`]);
-
-        setIsFavorite(verifyFavorite);
-      }
-    }
-    getFav();
-  }, [title, setIsFavorite, recipe]);
-
-  const shareRecipe = () => {
-    copy(window.location.href);
-    setDidCopy(true);
-  };
+  useFav(title, setIsFavorite, recipe);
 
   const favoriteRecipe = () => {
     const favList = JSON.parse(localStorage.getItem('favoriteRecipes'))
@@ -154,7 +114,7 @@ function RecipeDetails({ match: { params: { id }, path } }) {
             <button
               type="button"
               data-testid="share-btn"
-              onClick={ shareRecipe }
+              onClick={ () => shareRecipe(setDidCopy) }
             >
               <img src={ ShareIcon } alt="share-icon" />
             </button>

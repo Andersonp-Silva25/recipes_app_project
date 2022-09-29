@@ -1,12 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useRecipe from '../services/useRecipe';
 import useRecipes from '../services/useRecipes';
 import useIngredients from '../services/useIngredients';
 import RecipesContext from '../context/RecipesContext';
 import './RecipeDetails.css';
 import ShareIcon from '../images/shareIcon.svg';
+import whiteHeart from '../images/whiteHeartIcon.svg';
+import blackHeart from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
@@ -14,12 +16,19 @@ function RecipeDetails({ match: { params: { id }, path } }) {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [didCopy, setDidCopy] = useState(false);
-  const { mealsAndDrinksArrays, setMealsAndDrinksArrays } = useContext(RecipesContext);
-  const history = useHistory();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const {
+    mealsAndDrinksArrays,
+    setMealsAndDrinksArrays,
+  } = useContext(RecipesContext);
+
   let title = '';
   let recommendationTitle = '';
   let invertedTitle = '';
   const cardLimit = 6;
+  const favList = JSON.parse(localStorage.getItem('favoriteRecipes'))
+    ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
 
   if (path.includes('/meals')) {
     title = 'Meal';
@@ -41,19 +50,37 @@ function RecipeDetails({ match: { params: { id }, path } }) {
     setDidCopy(true);
   };
 
+  useEffect(() => {
+    const checkMealsAndDrinks = JSON.parse(localStorage.getItem('MealsAndDrinks'));
+    if (!checkMealsAndDrinks) localStorage.setItem('favoriteRecipes', '[]');
+
+    const verifyFavorite = favList
+      .some((fav) => fav.id === checkMealsAndDrinks[0][`id${title}`]);
+
+    setIsFavorite(verifyFavorite);
+  }, []);
+
   const favoriteRecipe = () => {
     const alcoholicOrNot = recipe[0].strAlcoholic ? recipe[0].strAlcoholic : '';
     const nationality = recipe[0].strArea ? recipe[0].strArea : '';
-    const obj = [{
-      id: recipe[0][`id${title}`],
-      type: title.toLowerCase(),
-      nationality,
-      category: recipe[0].strCategory,
-      alcoholicOrNot,
-      name: recipe[0][`str${title}`],
-      image: recipe[0][`str${title}Thumb`],
-    }];
-    localStorage.setItem('favoriteRecipes', JSON.stringify(obj));
+
+    if (!isFavorite) {
+      const obj = {
+        id: recipe[0][`id${title}`],
+        type: title.toLowerCase(),
+        nationality,
+        category: recipe[0].strCategory,
+        alcoholicOrNot,
+        name: recipe[0][`str${title}`],
+        image: recipe[0][`str${title}Thumb`],
+      };
+      const newArray = [...favList, obj];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
+    } else {
+      const deleteFav = favList.filter((fav) => fav.id !== recipe[0][`id${title}`]);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(deleteFav));
+      setIsFavorite(false);
+    }
   };
 
   return (
@@ -82,7 +109,11 @@ function RecipeDetails({ match: { params: { id }, path } }) {
               data-testid="favorite-btn"
               onClick={ favoriteRecipe }
             >
-              Favorite
+              {isFavorite ? (
+                <img src={ blackHeart } alt="Coração preenchido" />
+              ) : (
+                <img src={ whiteHeart } alt="Coração vazio" />
+              )}
             </button>
 
             <button

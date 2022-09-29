@@ -10,8 +10,14 @@ async function useRecipe(id, path, setRecipe) {
       fetch(endpoint)
         .then((response) => response.json())
         .then(({ meals, drinks }) => {
-          if (meals) setRecipe(meals);
-          if (drinks) setRecipe(drinks);
+          if (meals) {
+            setRecipe(meals);
+            localStorage.setItem('MealsAndDrinks', JSON.stringify(meals));
+          }
+          if (drinks) {
+            setRecipe(drinks);
+            localStorage.setItem('MealsAndDrinks', JSON.stringify(drinks));
+          }
         })
         .catch((error) => console.error(`Something is wrong ${error}`));
     }

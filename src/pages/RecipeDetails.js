@@ -58,7 +58,7 @@ function RecipeDetails({ match: { params: { id }, path } }) {
       .some((fav) => fav.id === checkMealsAndDrinks[0][`id${title}`]);
 
     setIsFavorite(verifyFavorite);
-  }, []);
+  }, []); // eslint-disable-line
 
   const favoriteRecipe = () => {
     const alcoholicOrNot = recipe[0].strAlcoholic ? recipe[0].strAlcoholic : '';

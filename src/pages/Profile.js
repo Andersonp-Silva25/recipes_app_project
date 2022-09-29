@@ -9,7 +9,6 @@ function Profile() {
   return (
     <div>
       <Header title="Profile" />
-      {/* Profile */}
       <span data-testid="profile-email">{user.email}</span>
       <br />
       <button
@@ -22,6 +21,7 @@ function Profile() {
       <button
         type="button"
         data-testid="profile-favorite-btn"
+        onClick={ () => history.push('/favorite-recipes') }
       >
         Favorite Recipes
       </button>

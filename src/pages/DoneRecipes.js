@@ -65,7 +65,13 @@ function DoneRecipes() {
                   {`${recipe.nationality} - ${recipe.category}`}
                 </p>
               </div>
-            ) : null}
+            ) : (
+              <p
+                data-testid={ `${index}-horizontal-top-text` }
+              >
+                {recipe.alcoholicOrNot}
+              </p>
+            )}
           <p>
             {recipe.tags.map((tag, indexTag) => (
               <span

@@ -1,59 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import ShareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
-  // /// ///////////////////////// mock
-  // const receitaTeste = [{
-  //   id: 52977,
-  //   type: 'meal',
-  //   nationality: 'brasileira',
-  //   category: 'Side',
-  //   alcoholicOrNot: '',
-  //   name: 'Corba',
-  //   image: 'https://www.themealdb.com/images/media/meals/58oia61564916529.jpg',
-  //   doneDate: '27/08/2022',
-  //   tags: ['Lentils', 'Onion'],
-  // },
-  // {
-  //   id: 15997,
-  //   type: 'drink',
-  //   nationality: 'brasileira',
-  //   category: 'beef',
-  //   alcoholicOrNot: '',
-  //   name: 'Beef and Mustard Pie',
-  //   image: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
-  //   doneDate: '30/09/2022',
-  //   tags: ['Beef', 'Plain Flour'],
-  // }];
-
-  // localStorage.setItem('doneRecipes', JSON.stringify(receitaTeste));
-  // /// //////////////////////////////
-
   const getDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+
+  const [doneRecipes, setDoneRecipes] = useState(getDoneRecipes);
+  const [didCopy, setDidCopy] = useState(false);
+  const [selectedID, setSelectedID] = useState('');
+
+  const copyURL = (url) => navigator.clipboard.writeText(url);
+
+  const copy = (id, type) => {
+    setDidCopy(true);
+    setSelectedID(id);
+    copyURL(`${window.origin}/${type.toLowerCase()}s/${id}`);
+  };
+
+  const handleBtn = ({ target: { value } }) => {
+    let filter;
+    switch (value) {
+    case 'Meals':
+      filter = getDoneRecipes.filter((recipe) => recipe.type === 'meal');
+      setDoneRecipes(filter);
+      break;
+    case 'Drinks':
+      filter = getDoneRecipes.filter((recipe) => recipe.type === 'drink');
+      setDoneRecipes(filter);
+      break;
+    default:
+      setDoneRecipes(getDoneRecipes);
+      break;
+    }
+  };
 
   return (
     <div>
       <Header title="Done Recipes" />
       Done Recipes
-      <button type="button" data-testid="filter-by-all-btn">All</button>
-      <button type="button" data-testid="filter-by-meal-btn">Meals</button>
-      <button type="button" data-testid="filter-by-drink-btn">Drinks</button>
+      <button
+        type="button"
+        data-testid="filter-by-all-btn"
+        value="All"
+        onClick={ handleBtn }
+      >
+        All
+      </button>
+      <button
+        type="button"
+        data-testid="filter-by-meal-btn"
+        value="Meals"
+        onClick={ handleBtn }
+      >
+        Meals
+      </button>
+      <button
+        type="button"
+        data-testid="filter-by-drink-btn"
+        value="Drinks"
+        onClick={ handleBtn }
+      >
+        Drinks
+      </button>
 
-      {getDoneRecipes.map((recipe, index) => (
+      {doneRecipes.map((recipe, index) => (
         <div key={ recipe.id }>
-          <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
-          <img
-            src={ recipe.image }
-            width="100px"
-            alt={ `Imagem da receita ${recipe.name}` }
-            data-testid={ `${index}-horizontal-image` }
-          />
-          <img
-            src={ ShareIcon }
-            alt="share-icon"
-            data-testid={ `${index}-horizontal-share-btn` }
-          />
+          <Link to={ `${recipe.type.toLowerCase()}s/${recipe.id}` }>
+            <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
+            <img
+              src={ recipe.image }
+              width="100px"
+              alt={ `Imagem da receita ${recipe.name}` }
+              data-testid={ `${index}-horizontal-image` }
+            />
+          </Link>
+          <button type="button" onClick={ () => copy(recipe.id, recipe.type) }>
+            <img
+              src={ ShareIcon }
+              alt="share-icon"
+              data-testid={ `${index}-horizontal-share-btn` }
+            />
+          </button>
+          {(didCopy && selectedID === recipe.id) && <span>Link copied!</span>}
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
           <p data-testid={ `${index}-horizontal-top-text` }>{recipe.catagory}</p>
           {recipe.type === 'meal'

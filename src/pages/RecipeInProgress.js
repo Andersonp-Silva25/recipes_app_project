@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import useRecipe from '../services/useRecipe';
+import useIngredients from '../services/useIngredients';
 import ShareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 // import blackHeart from '../images/blackHeartIcon.svg';
@@ -8,16 +9,54 @@ import shareRecipe from '../services/shareRecipe';
 
 function RecipeInProgress({ match: { params: { id }, path } }) {
   const [recipe, setRecipe] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
   let title = '';
+  let type = '';
 
   if (path.includes('/meals')) {
     title = 'Meal';
+    type = 'meals';
   }
   if (path.includes('/drinks')) {
     title = 'Drink';
+    type = 'drinks';
+  }
+
+  function addIngredient() {
+    const savedInProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'))
+      ? JSON.parse(localStorage.getItem('inProgressRecipes')) : {};
+    const newInProgressRecipes = {
+      ...savedInProgressRecipes,
+      [type]: {
+        ...savedInProgressRecipes[type],
+        [id]: ingredients,
+      },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(newInProgressRecipes));
+  }
+
+  async function ingredientHandle(index) {
+    await addIngredient();
+
+    ingredients[index].Completed = !(ingredients[index].Completed);
+    const ingredientName = document.getElementById(`${index}-ingredient-step`)
+      .parentElement;
+    const checkbox = document.getElementById(`${index}-ingredient-step`);
+    if (ingredients[index].Completed) {
+      ingredientName.style.textDecoration = 'line-through';
+      ingredients[index].textDecoration = 'line-through';
+      checkbox.checked = true;
+    } else {
+      ingredientName.style.textDecoration = 'none';
+      ingredients[index].textDecoration = 'none';
+      checkbox.checked = false;
+    }
+
+    addIngredient();
   }
 
   useRecipe(id, title, setRecipe);
+  useIngredients(recipe, setIngredients, type, id);
 
   return (
     <div>
@@ -56,6 +95,28 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
             >
               <img src={ ShareIcon } alt="share-icon" />
             </button>
+            {ingredients.length > 0
+              && (
+                <div>
+                  {ingredients
+                    .map(({ Ingredient, Measure, Completed, textDecoration }, index) => (
+                      <label
+                        key={ index }
+                        data-testid={ `${index}-ingredient-step` }
+                        htmlFor={ `${index}-ingredient-step` }
+                        style={ { textDecoration } }
+                      >
+                        {`${Ingredient} - ${Measure}`}
+                        <input
+                          id={ `${index}-ingredient-step` }
+                          type="checkbox"
+                          checked={ Completed }
+                          onChange={ () => ingredientHandle(index) }
+                        />
+                      </label>
+                    ))}
+                </div>
+              )}
             <p data-testid="instructions">{recipe[0].strInstructions}</p>
             <button
               data-testid="finish-recipe-btn"

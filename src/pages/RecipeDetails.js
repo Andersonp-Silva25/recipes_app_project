@@ -24,24 +24,27 @@ function RecipeDetails({ match: { params: { id }, path } }) {
   } = useContext(RecipesContext);
 
   let title = '';
+  let type = '';
   let recommendationTitle = '';
   let invertedTitle = '';
   const cardLimit = 6;
 
   if (path.includes('/meals')) {
     title = 'Meal';
+    type = 'meals';
     recommendationTitle = '/drinks';
     invertedTitle = 'Drink';
   }
   if (path.includes('/drinks')) {
     title = 'Drink';
+    type = 'drinks';
     recommendationTitle = '/meals';
     invertedTitle = 'Meal';
   }
 
   useRecipe(id, title, setRecipe);
   useRecipes(recommendationTitle, setMealsAndDrinksArrays);
-  useIngredients(recipe, setIngredients, title);
+  useIngredients(recipe, setIngredients, type, id);
   useFav(title, setIsFavorite, recipe);
 
   const favoriteRecipe = () => {

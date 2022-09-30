@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import useRecipe from '../services/useRecipe';
+import useFav from '../services/useFav';
 import useIngredients from '../services/useIngredients';
+import useCompleted from '../services/useCompleted';
 import ShareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
-// import blackHeart from '../images/blackHeartIcon.svg';
+import blackHeart from '../images/blackHeartIcon.svg';
 import shareRecipe from '../services/shareRecipe';
 
 function RecipeInProgress({ match: { params: { id }, path } }) {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [didCopy, setDidCopy] = useState(false);
+  const [completed, setCompleted] = useState(false);
   let title = '';
   let type = '';
 
@@ -35,28 +41,57 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
     localStorage.setItem('inProgressRecipes', JSON.stringify(newInProgressRecipes));
   }
 
-  async function ingredientHandle(index) {
-    await addIngredient();
+  function ingredientHandle(index) {
+    const newIngredients = [];
 
-    ingredients[index].Completed = !(ingredients[index].Completed);
-    const ingredientName = document.getElementById(`${index}-ingredient-step`)
-      .parentElement;
-    const checkbox = document.getElementById(`${index}-ingredient-step`);
-    if (ingredients[index].Completed) {
-      ingredientName.style.textDecoration = 'line-through';
-      ingredients[index].textDecoration = 'line-through';
-      checkbox.checked = true;
-    } else {
-      ingredientName.style.textDecoration = 'none';
-      ingredients[index].textDecoration = 'none';
-      checkbox.checked = false;
-    }
+    ingredients.forEach((ingredient, index2) => {
+      if (index === index2) {
+        ingredient.Completed = !(ingredient.Completed);
+        if (ingredient.Completed) {
+          ingredient.textDecoration = 'line-through';
+        } else {
+          ingredient.textDecoration = 'none';
+        }
+      }
+      newIngredients.push(ingredient);
+    });
+
+    setIngredients(newIngredients);
 
     addIngredient();
   }
 
   useRecipe(id, title, setRecipe);
   useIngredients(recipe, setIngredients, type, id);
+  useFav(title, setIsFavorite, recipe);
+  useCompleted(ingredients, setCompleted);
+
+  const favoriteRecipe = () => {
+    const favList = JSON.parse(localStorage.getItem('favoriteRecipes'))
+      ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
+
+    const alcoholicOrNot = recipe[0].strAlcoholic ? recipe[0].strAlcoholic : '';
+    const nationality = recipe[0].strArea ? recipe[0].strArea : '';
+
+    if (!isFavorite) {
+      const obj = {
+        id: recipe[0][`id${title}`],
+        type: title.toLowerCase(),
+        nationality,
+        category: recipe[0].strCategory,
+        alcoholicOrNot,
+        name: recipe[0][`str${title}`],
+        image: recipe[0][`str${title}Thumb`],
+      };
+      const newArray = [...favList, obj];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
+      setIsFavorite(true);
+    } else {
+      const deleteFav = favList.filter((fav) => fav.id !== recipe[0][`id${title}`]);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(deleteFav));
+      setIsFavorite(false);
+    }
+  };
 
   return (
     <div>
@@ -80,13 +115,21 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
             <button
               type="button"
               className="favorite-recipe"
-            // onClick={ favoriteRecipe }
+              onClick={ favoriteRecipe }
             >
-              <img
-                data-testid="favorite-btn"
-                src={ whiteHeart }
-                alt="Coração vazio"
-              />
+              {isFavorite ? (
+                <img
+                  data-testid="favorite-btn"
+                  src={ blackHeart }
+                  alt="Coração preenchido"
+                />
+              ) : (
+                <img
+                  data-testid="favorite-btn"
+                  src={ whiteHeart }
+                  alt="Coração vazio"
+                />
+              )}
             </button>
             <button
               type="button"
@@ -95,6 +138,9 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
             >
               <img src={ ShareIcon } alt="share-icon" />
             </button>
+
+            {didCopy && <p>Link copied!</p>}
+
             {ingredients.length > 0
               && (
                 <div>
@@ -118,12 +164,16 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
                 </div>
               )}
             <p data-testid="instructions">{recipe[0].strInstructions}</p>
-            <button
-              data-testid="finish-recipe-btn"
-              type="button"
-            >
-              Finalizar
-            </button>
+            <Link to="/done-recipes">
+              <button
+                data-testid="finish-recipe-btn"
+                type="button"
+                disabled={ !completed }
+                style={ { position: 'fixed', bottom: 0 } }
+              >
+                Finalizar
+              </button>
+            </Link>
           </div>
         )}
     </div>

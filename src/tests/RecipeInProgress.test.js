@@ -19,6 +19,39 @@ describe('Testa o componente RecipeInProgress', () => {
       const checkbox = screen.getByTestId('0-ingredient-step');
       expect(checkbox).toBeInTheDocument();
       userEvent.click(checkbox);
+      userEvent.click(checkbox);
+    });
+  });
+
+  it('Testa o botão share', async () => {
+    const mockClipboard = {
+      writeText: jest.fn(),
+    };
+    navigator.clipboard = mockClipboard;
+    renderWithRouter(<App />, ['/meals/53065/in-progress']);
+    await waitFor(() => {
+      const shareBtn = screen.getByTestId('share-btn');
+      expect(shareBtn).toBeInTheDocument();
+      userEvent.click(shareBtn);
+    });
+  });
+
+  it('Testa o botão favoritar', async () => {
+    renderWithRouter(<App />, ['/meals/52977/in-progress']);
+    const favBtnId = 'favorite-btn';
+    await waitFor(() => {
+      const favButton = screen.getByTestId(favBtnId);
+      expect(favButton).toBeInTheDocument();
+      userEvent.click(favButton);
+    });
+    await waitFor(() => {
+      const favButton = screen.getByTestId(favBtnId);
+      expect(favButton).toHaveAttribute('src', 'blackHeartIcon.svg');
+      userEvent.click(favButton);
+    });
+    await waitFor(() => {
+      const favButton = screen.getByTestId(favBtnId);
+      expect(favButton).toHaveAttribute('src', 'whiteHeartIcon.svg');
     });
   });
 });

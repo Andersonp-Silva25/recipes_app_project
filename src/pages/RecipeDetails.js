@@ -47,6 +47,20 @@ function RecipeDetails({ match: { params: { id }, path } }) {
   useIngredients(recipe, setIngredients, type, id);
   useFav(title, setIsFavorite, recipe);
 
+  const getDoneRecipes = () => {
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes')) ?? [];
+    const isDone = doneRecipes.some((doneRecipe) => doneRecipe.id === id);
+    return isDone;
+  };
+
+  const getInProgressRecipes = () => {
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'))
+  ?? { drinks: {}, meals: {} };
+    const isInProgress = Object.keys(inProgressRecipes[type])
+      .some((progress) => progress === id);
+    return isInProgress;
+  };
+
   const favoriteRecipe = () => {
     const favList = JSON.parse(localStorage.getItem('favoriteRecipes'))
       ? JSON.parse(localStorage.getItem('favoriteRecipes')) : [];
@@ -163,15 +177,18 @@ function RecipeDetails({ match: { params: { id }, path } }) {
             </div>
           </div>
         )}
-      <Link to={ `${path.split(':')[0]}${id}/in-progress` }>
-        <button
-          type="button"
-          className="start-recipe"
-          data-testid="start-recipe-btn"
-        >
-          Start Recipe
-        </button>
-      </Link>
+      {!getDoneRecipes() && (
+        <Link to={ `${path.split(':')[0]}${id}/in-progress` }>
+          <button
+            type="button"
+            className="start-recipe"
+            data-testid="start-recipe-btn"
+          >
+            {getInProgressRecipes() ? 'Continue Recipe' : 'Start Recipe'}
+          </button>
+        </Link>
+      )}
+
     </div>
   );
 }

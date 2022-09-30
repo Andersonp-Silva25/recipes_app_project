@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../components/Header';
+import ShareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
   // /// ///////////////////////// mock
@@ -15,13 +16,13 @@ function DoneRecipes() {
   //   tags: ['Lentils', 'Onion'],
   // },
   // {
-  //   id: 52874,
-  //   type: 'meal',
+  //   id: 15997,
+  //   type: 'drink',
   //   nationality: 'brasileira',
   //   category: 'beef',
   //   alcoholicOrNot: '',
   //   name: 'Beef and Mustard Pie',
-  //   image: 'https://www.themealdb.com/images/media/meals/sytuqu1511553755.jpg',
+  //   image: 'https://www.thecocktaildb.com/images/media/drink/2x8thr1504816928.jpg',
   //   doneDate: '30/09/2022',
   //   tags: ['Beef', 'Plain Flour'],
   // }];
@@ -48,14 +49,23 @@ function DoneRecipes() {
             alt={ `Imagem da receita ${recipe.name}` }
             data-testid={ `${index}-horizontal-image` }
           />
-          <button
-            type="button"
+          <img
+            src={ ShareIcon }
+            alt="share-icon"
             data-testid={ `${index}-horizontal-share-btn` }
-          >
-            compartilhar
-          </button>
+          />
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
-          <p data-testid={ `${index}-horizontal-top-text` }>{recipe.category}</p>
+          <p data-testid={ `${index}-horizontal-top-text` }>{recipe.catagory}</p>
+          {recipe.type === 'meal'
+            ? (
+              <div>
+                <p
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  {`${recipe.nationality} - ${recipe.category}`}
+                </p>
+              </div>
+            ) : null}
           <p>
             {recipe.tags.map((tag, indexTag) => (
               <span

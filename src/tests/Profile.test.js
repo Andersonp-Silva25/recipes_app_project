@@ -8,7 +8,7 @@ beforeEach(() => {
   localStorage.setItem('user', '{"email":"hakunaMatata@xablau.com"}');
 });
 
-describe('Testa o componente Recipes', () => {
+describe('Testa a pagina Profile', () => {
   test('Testa se o email e os botões estão sendo renderizados corretamente', () => {
     renderWithRouter(<App />, ['/profile']);
 

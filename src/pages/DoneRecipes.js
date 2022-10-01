@@ -7,13 +7,11 @@ function DoneRecipes() {
   const getDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
 
   const [doneRecipes, setDoneRecipes] = useState(getDoneRecipes);
-  const [didCopy, setDidCopy] = useState(false);
   const [selectedID, setSelectedID] = useState('');
 
   const copyURL = (url) => navigator.clipboard.writeText(url);
 
   const copy = (id, type) => {
-    setDidCopy(true);
     setSelectedID(id);
     copyURL(`${window.origin}/${type.toLowerCase()}s/${id}`);
   };
@@ -38,7 +36,7 @@ function DoneRecipes() {
   return (
     <div>
       <Header title="Done Recipes" />
-      Done Recipes
+      <br />
       <button
         type="button"
         data-testid="filter-by-all-btn"
@@ -63,6 +61,8 @@ function DoneRecipes() {
       >
         Drinks
       </button>
+      <br />
+      <br />
 
       {doneRecipes.map((recipe, index) => (
         <div key={ recipe.id }>
@@ -75,14 +75,18 @@ function DoneRecipes() {
               data-testid={ `${index}-horizontal-image` }
             />
           </Link>
-          <button type="button" onClick={ () => copy(recipe.id, recipe.type) }>
+          <button
+            data-testid="shareBTN"
+            type="button"
+            onClick={ () => copy(recipe.id, recipe.type) }
+          >
             <img
               src={ ShareIcon }
               alt="share-icon"
               data-testid={ `${index}-horizontal-share-btn` }
             />
           </button>
-          {(didCopy && selectedID === recipe.id) && <span>Link copied!</span>}
+          {(selectedID === recipe.id) && <span>Link copied!</span>}
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
           <p data-testid={ `${index}-horizontal-top-text` }>{recipe.catagory}</p>
           {recipe.type === 'meal'

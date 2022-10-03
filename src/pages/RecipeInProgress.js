@@ -30,7 +30,7 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
 
   function addIngredient() {
     const savedInProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'))
-      ? JSON.parse(localStorage.getItem('inProgressRecipes')) : {};
+      ? JSON.parse(localStorage.getItem('inProgressRecipes')) : { drinks: {}, meals: {} };
     const newInProgressRecipes = {
       ...savedInProgressRecipes,
       [type]: {

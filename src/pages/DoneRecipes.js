@@ -64,7 +64,7 @@ function DoneRecipes() {
       <br />
       <br />
 
-      {doneRecipes.map((recipe, index) => (
+      {doneRecipes !== null && doneRecipes.map((recipe, index) => (
         <div key={ recipe.id }>
           <Link to={ `${recipe.type.toLowerCase()}s/${recipe.id}` }>
             <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>

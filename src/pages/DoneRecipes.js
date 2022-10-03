@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FavoriteDoneRecipesBTN from '../components/FavoriteDoneRecipesBTN';
 import Header from '../components/Header';
 import ShareIcon from '../images/shareIcon.svg';
 
 function DoneRecipes() {
   const getDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+  console.log(getDoneRecipes);
 
   const [doneRecipes, setDoneRecipes] = useState(getDoneRecipes);
   const [selectedID, setSelectedID] = useState('');
@@ -36,6 +38,7 @@ function DoneRecipes() {
   return (
     <div>
       <Header title="Done Recipes" />
+      {/* <FavoriteDoneRecipesBTN handleBtn={ handleBtn } /> */}
       <br />
       <button
         type="button"

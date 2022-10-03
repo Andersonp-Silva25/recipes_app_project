@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import useRecipe from '../services/useRecipe';
 import useFav from '../services/useFav';
+import useDone from '../services/useDone';
 import useIngredients from '../services/useIngredients';
 import useCompleted from '../services/useCompleted';
 import ShareIcon from '../images/shareIcon.svg';
@@ -14,6 +15,7 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
   const [recipe, setRecipe] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isDone, setIsDone] = useState(false);
   const [didCopy, setDidCopy] = useState(false);
   const [completed, setCompleted] = useState(false);
   let title = '';
@@ -64,6 +66,7 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
   useRecipe(id, title, setRecipe);
   useIngredients(recipe, setIngredients, type, id);
   useFav(title, setIsFavorite, recipe);
+  useDone(title, setIsDone, recipe);
   useCompleted(ingredients, setCompleted);
 
   const favoriteRecipe = () => {
@@ -92,6 +95,31 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
       setIsFavorite(false);
     }
   };
+
+  function finishBtnHandle() {
+    const doneList = JSON.parse(localStorage.getItem('doneRecipes'))
+      ? JSON.parse(localStorage.getItem('doneRecipes')) : [];
+
+    const alcoholicOrNot = recipe[0].strAlcoholic ? recipe[0].strAlcoholic : '';
+    const nationality = recipe[0].strArea ? recipe[0].strArea : '';
+    const tags = recipe[0].strArea ? recipe[0].strArea.split(',') : [];
+
+    if (!isDone) {
+      const obj = {
+        id: recipe[0][`id${title}`],
+        type: title.toLowerCase(),
+        nationality,
+        category: recipe[0].strCategory,
+        alcoholicOrNot,
+        name: recipe[0][`str${title}`],
+        image: recipe[0][`str${title}Thumb`],
+        tags,
+      };
+      const newArray = [...doneList, obj];
+      localStorage.setItem('doneRecipes', JSON.stringify(newArray));
+      setIsDone(true);
+    }
+  }
 
   return (
     <div>
@@ -169,6 +197,7 @@ function RecipeInProgress({ match: { params: { id }, path } }) {
                 data-testid="finish-recipe-btn"
                 type="button"
                 disabled={ !completed }
+                onClick={ finishBtnHandle }
                 style={ { position: 'fixed', bottom: 0 } }
               >
                 Finalizar

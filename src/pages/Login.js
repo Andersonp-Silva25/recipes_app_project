@@ -5,6 +5,8 @@ import {
   addMealsLocalStorage,
   addDrinksLocalStorage,
 } from '../services/storage';
+import '../style/Login.css';
+// import LOGO from '../images/logo-Recipes-App.png';
 
 function Login() {
   const [emailValue, setEmailValue] = useState('');
@@ -40,36 +42,39 @@ function Login() {
   };
 
   return (
-    <form onSubmit={ handleSubmit }>
-      <h1>Recipe App</h1>
-      <label htmlFor="email">
-        Email
-        <input
-          type="text"
-          value={ emailValue }
-          onChange={ ({ target }) => setEmailValue(target.value) }
-          data-testid="email-input"
-          id="email"
-        />
-      </label>
-      <label htmlFor="password">
-        Senha
-        <input
-          type="password"
-          data-testid="password-input"
-          id="password"
-          value={ passwordValue }
-          onChange={ ({ target }) => setPasswordValue(target.value) }
-        />
-      </label>
-      <button
-        type="submit"
-        data-testid="login-submit-btn"
-        disabled={ !(emailInput && passwordInput) }
-      >
-        Enter
-      </button>
-    </form>
+    <main>
+      <div className="background-img" />
+      <form onSubmit={ handleSubmit }>
+        <h1>Recipe App</h1>
+        <label htmlFor="email">
+          Email
+          <input
+            type="text"
+            value={ emailValue }
+            onChange={ ({ target }) => setEmailValue(target.value) }
+            data-testid="email-input"
+            id="email"
+          />
+        </label>
+        <label htmlFor="password">
+          Senha
+          <input
+            type="password"
+            data-testid="password-input"
+            id="password"
+            value={ passwordValue }
+            onChange={ ({ target }) => setPasswordValue(target.value) }
+          />
+        </label>
+        <button
+          type="submit"
+          data-testid="login-submit-btn"
+          disabled={ !(emailInput && passwordInput) }
+        >
+          Enter
+        </button>
+      </form>
+    </main>
   );
 }
 

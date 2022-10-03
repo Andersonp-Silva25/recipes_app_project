@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FavoriteDoneRecipesBTN from '../components/FavoriteDoneRecipesBTN';
 import Header from '../components/Header';
 import ShareIcon from '../images/shareIcon.svg';
 

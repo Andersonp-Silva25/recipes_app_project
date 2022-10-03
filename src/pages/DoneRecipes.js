@@ -76,7 +76,7 @@ function DoneRecipes() {
             />
           </Link>
           <button
-            data-testid="shareBTN"
+            data-testid={ `${index}-shareBtn` }
             type="button"
             onClick={ () => copy(recipe.id, recipe.type) }
           >

@@ -9,9 +9,11 @@ beforeEach(() => {
   localStorage.setItem('doneRecipes', JSON.stringify(mockDoneRecipes));
 });
 
+const URL = '/done-recipes';
+
 describe('Testa a pagina Done Recipes', () => {
   test('Testa se a pagina tem os botões de filtro "All, Meals, Drinks"', () => {
-    renderWithRouter(<App />, ['/done-recipes']);
+    renderWithRouter(<App />, [URL]);
 
     const allBtn = screen.getByTestId('filter-by-all-btn');
     const mealsBtn = screen.getByTestId('filter-by-meal-btn');
@@ -27,9 +29,9 @@ describe('Testa a pagina Done Recipes', () => {
       writeText: jest.fn(),
     };
     navigator.clipboard = mockClipboard;
-    renderWithRouter(<App />, ['/meals/52977']);
+    renderWithRouter(<App />, [URL]);
     await waitFor(() => {
-      const shareBtn = screen.queryAllByTestId('share-btn');
+      const shareBtn = screen.queryAllByTestId('0-shareBtn');
       expect(shareBtn[0]).toBeInTheDocument();
       userEvent.click(shareBtn[0]);
       const linkCopied = screen.queryByText('Link copied!');
@@ -39,7 +41,7 @@ describe('Testa a pagina Done Recipes', () => {
   });
 
   test('Testa os botões de filtro', async () => {
-    renderWithRouter(<App />, ['/done-recipes']);
+    renderWithRouter(<App />, [URL]);
 
     const mealsBtn = screen.getByTestId('filter-by-meal-btn');
     userEvent.click(mealsBtn);

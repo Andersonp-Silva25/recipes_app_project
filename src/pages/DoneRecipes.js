@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import ShareIcon from '../images/shareIcon.svg';
+import shareDoneRecipe from '../services/shareDoneRecipe';
 
 function DoneRecipes() {
   const getDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
@@ -9,12 +10,12 @@ function DoneRecipes() {
   const [doneRecipes, setDoneRecipes] = useState(getDoneRecipes);
   const [selectedID, setSelectedID] = useState('');
 
-  const copyURL = (url) => navigator.clipboard.writeText(url);
+  // const copyURL = (url) => navigator.clipboard.writeText(url);
 
-  const copy = (id, type) => {
-    setSelectedID(id);
-    copyURL(`${window.origin}/${type.toLowerCase()}s/${id}`);
-  };
+  // const copy = (id, type) => {
+  //   setSelectedID(id);
+  //   copyURL(`${window.origin}/${type.toLowerCase()}s/${id}`);
+  // };
 
   const handleBtn = ({ target: { value } }) => {
     let filter;
@@ -78,7 +79,8 @@ function DoneRecipes() {
           <button
             data-testid="shareBTN"
             type="button"
-            onClick={ () => copy(recipe.id, recipe.type) }
+            // onClick={ () => copy(recipe.id, recipe.type) }
+            onClick={ () => shareDoneRecipe(setSelectedID, recipe.id, recipe.type) }
           >
             <img
               src={ ShareIcon }

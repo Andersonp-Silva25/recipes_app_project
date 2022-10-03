@@ -4,12 +4,9 @@ import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
 import App from '../App';
 import mockDoneRecipes from '../services/mockDoneRecipes';
-// import filterBtn from '../pages/DoneRecipes';
 
 beforeEach(() => {
   localStorage.setItem('doneRecipes', JSON.stringify(mockDoneRecipes));
-  // const getDoneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-  // const [doneRecipes, setDoneRecipes] = useState(getDoneRecipes);
 });
 
 describe('Testa a pagina Done Recipes', () => {
@@ -35,17 +32,39 @@ describe('Testa a pagina Done Recipes', () => {
       const shareBtn = screen.queryAllByTestId('share-btn');
       expect(shareBtn[0]).toBeInTheDocument();
       userEvent.click(shareBtn[0]);
+      const linkCopied = screen.queryByText('Link copied!');
+      expect(linkCopied).toBeInTheDocument();
+      expect(navigator.clipboard.writeText).toBeCalled();
     });
   });
 
-  // test('Testa os botões de filtro', async () => {
-  //   renderWithRouter(<App />, ['/done-recipes']);
+  test('Testa os botões de filtro', async () => {
+    renderWithRouter(<App />, ['/done-recipes']);
 
-  //   const mealsBtn = screen.getByTestId('filter-by-meal-btn');
-  //   userEvent.click(mealsBtn);
+    const mealsBtn = screen.getByTestId('filter-by-meal-btn');
+    userEvent.click(mealsBtn);
 
-  //   await waitFor(() => {
-  //     expect(doneRecipes.length).toBe(1);
-  //   });
-  // });
+    await waitFor(() => {
+      const recipe = screen.getByText('Corba');
+      expect(recipe).toBeInTheDocument();
+    });
+
+    const drinksBtn = screen.getByTestId('filter-by-drink-btn');
+    userEvent.click(drinksBtn);
+
+    await waitFor(() => {
+      const recipe = screen.getByText('501 Blue');
+      expect(recipe).toBeInTheDocument();
+    });
+
+    const allBtn = screen.getByTestId('filter-by-all-btn');
+    userEvent.click(allBtn);
+
+    await waitFor(() => {
+      const mealRecipe = screen.getByText('Corba');
+      const drinkRecipe = screen.getByText('501 Blue');
+      expect(mealRecipe).toBeInTheDocument();
+      expect(drinkRecipe).toBeInTheDocument();
+    });
+  });
 });

@@ -6,7 +6,8 @@ import {
   addDrinksLocalStorage,
 } from '../services/storage';
 import '../style/Login.css';
-// import LOGO from '../images/logo-Recipes-App.png';
+import LOGO from '../images/logo-Recipes-App.png';
+import TOMATE from '../images/tomate.png';
 
 function Login() {
   const [emailValue, setEmailValue] = useState('');
@@ -43,37 +44,44 @@ function Login() {
 
   return (
     <main>
-      <div className="background-img" />
-      <form onSubmit={ handleSubmit }>
-        <h1>Recipe App</h1>
-        <label htmlFor="email">
-          Email
-          <input
-            type="text"
-            value={ emailValue }
-            onChange={ ({ target }) => setEmailValue(target.value) }
-            data-testid="email-input"
-            id="email"
-          />
-        </label>
-        <label htmlFor="password">
-          Senha
-          <input
-            type="password"
-            data-testid="password-input"
-            id="password"
-            value={ passwordValue }
-            onChange={ ({ target }) => setPasswordValue(target.value) }
-          />
-        </label>
-        <button
-          type="submit"
-          data-testid="login-submit-btn"
-          disabled={ !(emailInput && passwordInput) }
-        >
-          Enter
-        </button>
-      </form>
+      <div className="background-img">
+        <img src={ LOGO } alt="logo" className="logo" />
+      </div>
+      <img src={ TOMATE } alt="tomate" className="tomate" />
+      <div className="container-form">
+        <form onSubmit={ handleSubmit } className="form-login">
+          <h1>Recipe App</h1>
+          <label htmlFor="email">
+            <input
+              type="text"
+              value={ emailValue }
+              onChange={ ({ target }) => setEmailValue(target.value) }
+              data-testid="email-input"
+              id="email"
+              placeholder="Email"
+            />
+          </label>
+          <label htmlFor="password">
+            <input
+              type="password"
+              data-testid="password-input"
+              id="password"
+              value={ passwordValue }
+              onChange={ ({ target }) => setPasswordValue(target.value) }
+              placeholder="Password"
+            />
+          </label>
+          <div className="position-btn">
+            <button
+              type="submit"
+              data-testid="login-submit-btn"
+              disabled={ !(emailInput && passwordInput) }
+            >
+              Enter
+            </button>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }

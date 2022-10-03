@@ -1,5 +1,71 @@
-/* .background-img{
+.background-img{
   background-color: #41197F;
+  display: flex;
+  height: 340px;
+  width: 360px;
+}
+
+.logo {
+  position: absolute;
+  left: 81px;
+  top: 20px;
+  width: 198px;
+  height: 157px;
+}
+
+.tomate {
+  position:absolute;
+  width: 358px;
+  top: 140px;
+}
+
+.container-form {
+  position: absolute;
+  top: 400px;
   height: 422px;
   width: 360px;
-} */
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label{
+  text-align: center;
+}
+
+input {
+  width: 276px;
+  height: 40px;
+  border: 0.5px solid #41197F;
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 15px;
+}
+
+h1{
+  text-align: center;
+}
+
+.position-btn{
+  text-align: center;
+}
+
+button {
+  width: 276px;
+  height: 40px;
+  border: none;
+  background-color: #41197F;
+  color: white;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.7s;
+}
+
+button:disabled{
+  background-color: #ccc;
+  transition: 0.7s;
+}

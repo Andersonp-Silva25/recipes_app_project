@@ -1,28 +1,28 @@
-.background-img{
-  background-color: #41197F;
+.background-img {
+  background-color: #41197f;
   display: flex;
   height: 340px;
   width: 360px;
 }
 
 .logo {
-  position: absolute;
+  height: 157px;
   left: 81px;
+  position: absolute;
   top: 20px;
   width: 198px;
-  height: 157px;
 }
 
 .tomate {
-  position:absolute;
-  width: 358px;
+  position: absolute;
   top: 140px;
+  width: 358px;
 }
 
 .container-form {
+  height: 422px;
   position: absolute;
   top: 400px;
-  height: 422px;
   width: 360px;
 }
 
@@ -32,40 +32,67 @@
   gap: 15px;
 }
 
-label{
+label {
   text-align: center;
 }
 
 input {
-  width: 276px;
-  height: 40px;
-  border: 0.5px solid #41197F;
+  border: 0.5px solid #41197f;
   border-radius: 5px;
   box-sizing: border-box;
+  height: 40px;
   padding: 15px;
+  width: 276px;
 }
 
-h1{
+h1 {
   text-align: center;
 }
 
-.position-btn{
+.position-btn {
   text-align: center;
 }
 
 button {
-  width: 276px;
-  height: 40px;
+  background-color: #41197f;
   border: none;
-  background-color: #41197F;
-  color: white;
   border-radius: 5px;
-  margin-top: 10px;
+  color: white;
   cursor: pointer;
+  height: 40px;
+  margin-top: 10px;
+  transition: 0.7s;
+  width: 276px;
+}
+
+button:disabled {
+  background-color: #ccc;
   transition: 0.7s;
 }
 
-button:disabled{
-  background-color: #ccc;
-  transition: 0.7s;
+@media screen and ( min-width : 1024px ) {
+
+  .background-img {
+    align-items: center;
+    background-color: #41197f;
+    display: flex;
+    height: 30vh;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .logo {
+    position: static;
+  }
+
+  .tomate {
+    display: none;
+  }
+
+  .container-form {
+    background-color: #41197f;
+    height: 70vh;
+    position: static;
+    width: 100%;
+  }
 }

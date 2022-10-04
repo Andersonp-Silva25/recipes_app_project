@@ -1,0 +1,65 @@
+@media screen and ( min-width : 1024px ) {
+
+  .headerContainer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .headerContainer h1 {
+    background-color: #41197f;
+  }
+
+  .headerBtnContainer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .headerBtn, .categoryBtn {
+    margin: 10px;
+    width: 40px;
+  }
+
+  .recipeContainer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .categorieContainer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .categoryBtn {
+    margin: 10px;
+    width: 80px;
+  }
+
+  .mealsAndDrinksContainer {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .mealAndDrinkCard {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 80px;
+    width: 25%;
+  }
+
+  .mealAndDrinkCard img {
+    width: 150px;
+  }
+
+  .footerContainer {
+    align-items: center;
+    background-color: #41197f;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .footerContainer a {
+    margin: 0 10px;
+  }
+}

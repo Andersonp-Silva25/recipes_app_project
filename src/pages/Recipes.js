@@ -31,11 +31,13 @@ function Recipes({ title }) {
   };
 
   return (
-    <div>
-      {categories
+    <div className="recipeContainer">
+      <div className="categorieContainer">
+        {categories
       && categories.slice(0, categoryLimit)
         .map(({ strCategory }, index) => (
           <button
+            className="categoryBtn"
             key={ index }
             type="button"
             data-testid={ `${strCategory}-category-filter` }
@@ -52,18 +54,24 @@ function Recipes({ title }) {
             {strCategory}
           </button>
         ))}
-      <button
-        type="button"
-        data-testid="All-category-filter"
-        onClick={ clearFilter }
-      >
-        All
-
-      </button>
-      {mealsAndDrinksArrays
+        <button
+          className="categoryBtn"
+          type="button"
+          data-testid="All-category-filter"
+          onClick={ clearFilter }
+        >
+          All
+        </button>
+      </div>
+      <div className="mealsAndDrinksContainer">
+        {mealsAndDrinksArrays
       && mealsAndDrinksArrays.slice(0, cardLimit)
         .map((item, index) => (
-          <Link key={ item[`id${title}`] } to={ `${pathname}/${item[`id${title}`]}` }>
+          <Link
+            className="mealAndDrinkCard"
+            key={ item[`id${title}`] }
+            to={ `${pathname}/${item[`id${title}`]}` }
+          >
             <div
               data-testid={ `${index}-recipe-card` }
             >
@@ -79,6 +87,7 @@ function Recipes({ title }) {
             </div>
           </Link>
         ))}
+      </div>
     </div>
   );
 }

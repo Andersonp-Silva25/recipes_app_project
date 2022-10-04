@@ -73,6 +73,7 @@ function Login() {
           </label>
           <div className="position-btn">
             <button
+              className="login-submit-btn"
               type="submit"
               data-testid="login-submit-btn"
               disabled={ !(emailInput && passwordInput) }

@@ -24,22 +24,29 @@ function Header(props) {
   };
 
   return (
-    <div>
+    <div className="headerContainer">
       {isDisplay && (
         <SearchBar title={ title } />
       )}
       <h1 data-testid="page-title">{title}</h1>
-      <button type="button" onClick={ goToProfile }>
-        <img src={ ProfileIcon } data-testid="profile-top-btn" alt="Profile Top Icon" />
-      </button>
-      { (title === 'Meals' || title === 'Drinks')
-      && (
-        <button
-          onClick={ handleClickFilter }
-          type="button"
-        >
-          <img src={ SearchIcon } data-testid="search-top-btn" alt="Search Top Icon" />
-        </button>)}
+      <div className="headerBtnContainer">
+        <button className="headerBtn" type="button" onClick={ goToProfile }>
+          <img src={ ProfileIcon } data-testid="profile-top-btn" alt="Profile Top Icon" />
+        </button>
+        {(title === 'Meals' || title === 'Drinks')
+          && (
+            <button
+              className="headerBtn"
+              onClick={ handleClickFilter }
+              type="button"
+            >
+              <img
+                src={ SearchIcon }
+                data-testid="search-top-btn"
+                alt="Search Top Icon"
+              />
+            </button>)}
+      </div>
     </div>
   );
 }

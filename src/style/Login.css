@@ -96,7 +96,7 @@ button:disabled {
     width: 100%;
   }
 
-  button {
+  .login-submit-btn {
     background-color: black;
   }
 }

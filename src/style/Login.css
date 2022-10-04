@@ -95,4 +95,8 @@ button:disabled {
     position: static;
     width: 100%;
   }
+
+  button {
+    background-color: black;
+  }
 }
